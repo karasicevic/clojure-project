@@ -5,13 +5,16 @@
   (defn -main
     "I don't do a whole lot ... yet."
     [& args]
-    (println "Hello, World!"))
+    (start-game))
 
-  5
+
+
+(+ 5 5)
+
 
 ;; lokalno definisane reči i njihovi vektori
-  (def words-vector
-    {"jabuka" [0.5 0.8 0.2]
+  (def words-vector 
+    {"jabuka" [0.5 0.8 0.2] 
      "kruška" [0.6 0.7 0.3]
      "šljiva" [0.55 0.75 0.25]
      "breskva" [0.58 0.78 0.22]
@@ -82,6 +85,7 @@
      "uši" [0.34 0.56 0.36]
      "vrat" [0.36 0.54 0.34]
      "obrve" [0.38 0.52 0.32]})
+  
 
 ;funkcija koja određuje sličnost između dve prosleđene reči na osnovu
 ;koordinata njihovih vektora
@@ -120,6 +124,37 @@
                      [(last word)])))
 
 5
+;; (defn game-round [played-words]
+;;   (let [current-word (random-word played-words)
+;;         similar-words (most-similar-words current-word words-vector)
+;;         target-word (last similar-words)]
+;;     (println "Slična reč vašoj zagodentnoj reči je:" target-word)
+
+;;     (loop [attempts 5]
+;;       (cond
+;;         (= attempts 0)
+;;         (do
+;;           (println "Nazalost niste pogodili zadatu reč. Zagonetna reč je bila:" current-word)
+;;           :exit)
+
+;;         :else
+;;         (do
+;;           (print "Vaš odgovor za zagonetnu reč je? ")
+;;           (flush)
+;;           (let [user-input (clojure.string/trim (read-line))]
+;;             (if (= user-input current-word)
+;;               (do
+;;                 (println "Uspešno ste pogodili zadatu reč!")
+;;                 :exit)
+;;               (do
+;;                 (println (case attempts
+;;                            5 (str "Još jedna slična reč je: " (second similar-words))
+;;                            4 (str "Još jedna slična reč je: " (first similar-words))
+;;                            3 (str "Broj slova u zadatoj reči je: " (count current-word))
+;;                            2 (str "Prvo slovo zadate reči je: " (add-first-letter current-word))
+;;                            1 (str "Poslednje slovo zadate reči je: " (add-first-and-last-letter current-word))))
+;;                 (recur (dec attempts))))))))))
+
 (defn game-round [played-words]
   (let [current-word (random-word played-words)
         similar-words (most-similar-words current-word words-vector)
@@ -135,25 +170,30 @@
 
         :else
         (do
-          (print "Vaš odgovor za zagonetnu reč je? ")
-          (flush)
-          (let [user-input (clojure.string/trim (read-line))]
+          
+          (println (case attempts
+                     5 (str "Još jedna slična reč je: " (second similar-words))
+                     4 (str "Još jedna slična reč je: " (first similar-words))
+                     3 (str "Broj slova u zadatoj reči je: " (count current-word))
+                     2 (str "Prvo slovo zadate reči je: " (add-first-letter current-word))
+                     1 (str "Poslednje slovo zadate reči je: " (add-first-and-last-letter current-word))))
+
+          (println "Vaš odgovor za zagonetnu reč je? ")
+          (let [user-input (read)]
             (if (= user-input current-word)
-              (do
+              (do 
                 (println "Uspešno ste pogodili zadatu reč!")
                 :exit)
-              (do
-                (println (case attempts
-                           5 (str "Još jedna slična reč je: " (second similar-words))
-                           4 (str "Još jedna slična reč je: " (first similar-words))
-                           3 (str "Broj slova u zadatoj reči je: " (count current-word))
-                           2 (str "Prvo slovo zadate reči je: " (add-first-letter current-word))
-                           1 (str "Poslednje slovo zadate reči je: " (add-first-and-last-letter current-word))))
-                (recur (dec attempts))))))))))
+              (recur (dec attempts)))))))))
+
 
 (defn start-game []
   (loop [played-words []]
     (println "------------------------")
     (recur (conj played-words (game-round played-words)))))
 
-(start-game)
+;(start-game)
+
+5
+
+
